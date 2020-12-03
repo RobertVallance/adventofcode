@@ -23,7 +23,7 @@ for i in range(0, len(expenses)):
 
 ### PART 2
 
-# iterate triplets pairs of values in expenses list to find the ones that sum to 2020
+# iterate over triplets of values in expenses list to find the ones that sum to 2020
 for i in range(0, len(expenses)):
 
 	for j in range(i+1, len(expenses)):

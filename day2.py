@@ -25,6 +25,7 @@ for line in file_passwords:
 	### PART 1
 
 	# check if the policy character count abides by the upper and lower policy bounds
+
 	policy_char_count = password.count(policy_char)
 
 	if (policy_char_count >= policy_lower_bound) and (policy_char_count <= policy_upper_bound):
@@ -41,8 +42,6 @@ for line in file_passwords:
 		or ((password[policy_lower_bound-1] != policy_char) and (password[policy_upper_bound-1] == policy_char)):
 		valid_passwords_count_part_2 += 1
 		#print('OK')
-
-
 
 
 

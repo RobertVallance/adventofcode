@@ -1,5 +1,4 @@
 # Advent of Code 2020
-![Advent of Code 2020]
 
 A repository of python solutions for the [Advent of Code](https://adventofcode.com/2020) challenges.
 
