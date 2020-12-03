@@ -2,6 +2,8 @@
 
 A repository of python solutions for the [Advent of Code](https://adventofcode.com/2020) challenges.
 
+![Day 3 sled run demo](day3example.gif)
+
 | | ||||||
 |-|-|-|-|-|-|-|
 ||1|2|3|4|5|6|
