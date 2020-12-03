@@ -1,4 +1,11 @@
 import copy
+import time
+
+
+# emoji symbols
+emoji_tree = '\U0001F332'
+emoji_sled = '\U0001f6f7'
+emoji_boom = '\U0001f4a5'
 
 
 def terrain_expand(terrain_orig_array, terrain_array):
@@ -53,16 +60,16 @@ def perform_trajectory(terrain_orig_array, x, y):
 		if x_position + x > len(terrain_array[0])-1:
 			terrain_array = terrain_expand(terrain_orig_array, terrain_array)
 		
-		# incremenr x position
+		# increment x position
 		x_position += x
 
 		# specify whether trajectory doesn't hit a tree in row (.) or does hit a tree (#)
-		# replace terrain_array with miss (O) or hit (X) symbol
+		# replace terrain_array with miss or hit symbol
 		if terrain_array[y_position][x_position] == '.':
-			terrain_array[y_position][x_position] = 'O'
-		elif terrain_array[y_position][x_position] == '#':
+			terrain_array[y_position][x_position] = emoji_sled
+		elif terrain_array[y_position][x_position] == emoji_tree:
 			number_trees_encountered += 1
-			terrain_array[y_position][x_position] = 'X'
+			terrain_array[y_position][x_position] = emoji_boom
 
 		
 	return terrain_array, number_trees_encountered
@@ -74,14 +81,26 @@ def perform_trajectory(terrain_orig_array, x, y):
 file_terrain = open('day3_terrain.txt', 'r')
 terrain_orig_array = []
 
-for line in file_terrain:
+maxrows = 32
+
+for j, line in enumerate(file_terrain):
+
+	if j == maxrows:
+		break
 
 	# remove blank space including newline chars from lines
 	line = line.strip()
 
 	# put each char in line into a temporary array that itself goes into terrain_orig_array
+
 	temp_line_array = []
+	
 	for char in line:
+		
+		# replace hashes with emoji for a tree
+		if char == '#':
+			char = emoji_tree
+
 		temp_line_array.append(char)
 	
 	terrain_orig_array.append(temp_line_array)
@@ -90,28 +109,87 @@ for line in file_terrain:
 
 
 # PART 1
-# User chooses what x and y velocities are
+# user chooses what x and y velocities are
 
-# hard code for now the x (right) and y (down) slope
-x = int(input('Enter an x velocity: '))
-y = int(input('Enter a y velocity: '))
+x = int(input('Enter x velocity: '))
+y = int(input('Enter y velocity: '))
 
-print('\nORIGINAL TERRAIN:')
-for row in terrain_orig_array:
-	print(''.join(row))
+#print('\nORIGINAL TERRAIN:')
+#print()
+#for row in terrain_orig_array:
+#	print(''.join(row))
 
 terrain_array, number_trees_encountered = perform_trajectory(terrain_orig_array, x, y)
 
 print('\nFINAL TERRAIN WITH TRAJECTORY:')
-for row in terrain_array:
-	print(''.join(row))
+print()
 
-print('\nNumber trees hit =', number_trees_encountered)
+# print final terrain without sled on it first
+for j in range(len(terrain_array)):
+
+	printout = ''.join(terrain_array[j])
+	printout = printout.replace(emoji_sled, '.')
+	printout = printout.replace(emoji_boom, emoji_tree)
+	
+	# emoji_tree and emoji_sled take up two spaces so need to set all chars to do this
+	printout = printout.replace('.', '. ')
+
+	# for line zero, want to show the sled at (0,0)
+	if j == 0:
+		printout = printout.replace('. ', emoji_sled, 1)
+	print(printout)
+
+
+
+# now go back to top of printed terrain - we will replace each terrain line with the sled (or boom) superimposed on top
+for i in range(len(terrain_array)+1):
+	print('\033[A' + '\033[A')
+
+
+
+# print countdown from 3 to 1 and finally GO!!!
+for i in reversed(range(1, 4)):
+	print(i, end='\r')
+	time.sleep(1)
+print('GO!!!')
+
+
+
+# now replace each terrain line so the character where sled is will be replaced by a sled (no hit) or boom (hit with tree)
+# also replace line above the current one to the original without sled or boom
+for j in range(len(terrain_array)):
+
+	# replace line above current one with the original terrain_array line (without sled or boom) as sled no longer there
+	# don't need to replace line above line zero (there isn't one to replace) so treat this as special case
+	if j != 0:
+		print('\033[A' + '\033[A')
+		prev_printout = ''.join(terrain_array[j-1])
+		prev_printout = prev_printout.replace(emoji_sled, '.')
+		prev_printout = prev_printout.replace(emoji_boom, emoji_tree)
+		prev_printout = prev_printout.replace('.', '. ')
+		print(prev_printout)
+
+	printout = ''.join(terrain_array[j])
+
+	# emoji_tree and emoji_sled take up two spaces so need to set all chars to do this
+	printout = printout.replace('.', '. ')
+	
+	# for line zero, want to show the sled at (0,0)
+	if j == 0:
+		printout = printout.replace('. ', emoji_sled, 1)
+	print(printout)
+	
+	# if sled has collision with tree (so there is emoji_boom in the line, then pause the animation)
+	if emoji_boom in printout:
+		time.sleep(0.5)
+	time.sleep(0.2)
+
+print('\nNumber trees hit =', number_trees_encountered, '\n')
 
 
 
 # PART 2
-# Choose preset trajectories and multiply number of trees from each
+# choose preset trajectories and multiply number of trees from each
 
 terrain_array_1, number_trees_encountered_1 = perform_trajectory(terrain_orig_array, 1, 1)
 terrain_array_2, number_trees_encountered_2 = perform_trajectory(terrain_orig_array, 3, 1)
