@@ -185,7 +185,7 @@ def get_individual_info(credential_list):
 		elif key == 'cid':
 			country_id = value
 		else:
-			print('Unknowkn key in individual:', key, ':', value)
+			print('Unknown key in individual:', key, ':', value)
 
 	# create a passport instance for the individual
 	passport = Passport(birth_yr, issue_yr, exp_yr, height, hair_clr, eye_clr, passport_id, country_id)
@@ -230,11 +230,16 @@ def read_process_passport_file(filename):
 				credential_list.append(line.split())
 			
 			# each line for an individual results in a list, so end up with a list of lists
-			# flatten the list to 1D
-
+			# so flatten the list to 1D
 			credential_list = [item for sublist in credential_list for item in sublist]
+
+			# pass credential_list to function that puts details in class instance
 			passport = get_individual_info(credential_list)
+
+			# append passport to passport list for all individuals
 			all_passports.append(passport)
+
+			# reset credential list and continue
 			credential_list = []
 			continue
 		
