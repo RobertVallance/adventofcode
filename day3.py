@@ -78,7 +78,7 @@ def perform_trajectory(terrain_orig_array, x, y):
 
 # read in the terrain
 
-file_terrain = open('day3_terrain.txt', 'r')
+file_terrain = open('day3_random_terrain.txt', 'r')
 terrain_orig_array = []
 
 maxrows = 32
@@ -124,7 +124,7 @@ terrain_array, number_trees_encountered = perform_trajectory(terrain_orig_array,
 print('\nFINAL TERRAIN WITH TRAJECTORY:')
 print()
 
-# print final terrain without sled on it first
+# print final terrain with sled at (0,0) first
 for j in range(len(terrain_array)):
 
 	printout = ''.join(terrain_array[j])
@@ -136,7 +136,9 @@ for j in range(len(terrain_array)):
 
 	# for line zero, want to show the sled at (0,0)
 	if j == 0:
-		printout = printout.replace('. ', emoji_sled, 1)
+		# need these if statments as tree takes up two chars and dot one char
+		if printout[0] == '.': 			printout = emoji_sled + printout[2:]
+		if printout[0] == emoji_tree:   printout = emoji_sled + printout[1:]
 	print(printout)
 
 
@@ -176,7 +178,9 @@ for j in range(len(terrain_array)):
 	
 	# for line zero, want to show the sled at (0,0)
 	if j == 0:
-		printout = printout.replace('. ', emoji_sled, 1)
+		# need these if statments as tree takes up two chars and dot one char
+		if printout[0] == '.': 			printout = emoji_sled + printout[2:]
+		if printout[0] == emoji_tree:   printout = emoji_sled + printout[1:]
 	print(printout)
 	
 	# if sled has collision with tree (so there is emoji_boom in the line, then pause the animation)
