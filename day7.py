@@ -303,8 +303,6 @@ if __name__ == "__main__":
 		if principal_bag == 'shiny gold':
 			bag_count = count_number_bags_in_princpal_bag(principal_bag, line_i, lines)
 
-		else:
-			continue
 			
 
 
